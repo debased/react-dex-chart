@@ -9,7 +9,7 @@
 
 📈 A Chart Component built with React, Lightweight-Charts - by debased dao
 
-![](https://i.imgur.com/ZDCj2Gy.png)
+![](https://i.imgur.com/IAknieO.png)
 
 ## Getting Started
 These instructions will help guide you to get and setup a copy of this library into to your own local repository and using it.
