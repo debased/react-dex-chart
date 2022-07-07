@@ -1,4 +1,6 @@
 # react-dex-chart
+## 📈 A Chart Component built with `react` and `lightweight-charts` - by debased dao
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -7,23 +9,92 @@
 [![Sicko Mode][sick-shield]][sick-url]
 
 
-📈 A Chart Component built with React, Lightweight-Charts - by debased dao
-
 ![](https://i.imgur.com/IAknieO.png)
+
+-----
+
+- [x] Themes
+- [x] Settings
+- [x] Easy to use
+- [x] Responsive
+
+-----
 
 ## Getting Started
 These instructions will help guide you to get and setup a copy of this library into to your own local repository and using it.
 
-### Prerequisites
+
+## Prerequisites
 Feel free to use the package manager of your choice:
 
 
 NPM: `npm install react react-dom react-dex-chart`
 
-Yarn: `yarn install react react-dom react-dex-chart`
+Yarn: `yarn add react react-dom react-dex-chart`
 
+------
 
-### Setting up the chart and its settings
+## Development
+If you are not interested in contributing to this repo and only in setting the chart up, skip to the part ahead.
+
+### Testing:
+
+`cd react-dex-chart && npm install`
+
+`sudo npm link`
+
+Inside of your testing project: 
+
+`npm link react-dex-chart`
+
+`npm run start`
+
+Setup the chart as usual to get started with development
+
+### Building react-dex-chart:
+
+`npm run build`
+
+------
+
+## Setting up the chart and its settings
+
+Create your own themes
+
+You can setup your own color schemes, or only allow a singular theme:
+```js
+
+const darkTheme: Theme = {
+  name: 'dark',
+  //default for now
+  candleStickConfig: {
+
+  },
+  histogramConfig: {
+
+  },
+
+  chartLayout: {
+      layout: {
+          backgroundColor: "rgba(7, 7, 28, 1)",
+          lineColor: "#2B2B43",
+          textColor: "#D9D9D9",
+      },
+      grid: {
+          vertLines: {
+              color: "rgba(250, 250, 250, .1)",
+          },
+          horzLines: {
+              color: "rgba(250, 250, 250, .1)",
+          },
+      },
+  }
+}
+```
+
+----
+
+Example:
 
 ```js
 <TradeChart
@@ -43,9 +114,9 @@ Yarn: `yarn install react react-dom react-dex-chart`
     interval={interval} 
     setInterval={setInterval}
     intervals={[
-    {id: 0, value: "1h", string: "Hourly"},
-    {id: 1, value: "4h", string: "4 Hours"},
-    {id: 2, value: "1d", string: "Daily"},
+        {id: 0, value: "1h", string: "Hourly"},
+        {id: 1, value: "4h", string: "4 Hours"},
+        {id: 2, value: "1d", string: "Daily"},
     ]}
 
     updateSetting={(p: any) => console.log(p)}
@@ -77,13 +148,13 @@ Yarn: `yarn install react react-dom react-dex-chart`
 
 ## Why this library?
 Mainly to not have a huge clutter of files in your repo,
-while also making it easier for people to use their own already extended charting library with as least possible setup required.
+while also making an extended and easier to use charting library with an as least possible setup required and many options.
 
 ## Documentation
 [Find documentation here](https://github.com/debased/react-dex-chart/wiki)
 
 ## Recommended usage
-We recommend using states for settings, and allowing them to be updated to improve UX.
+We recommend using component states for settings, and allowing them to be updated to improve UX.
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
