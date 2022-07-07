@@ -3,6 +3,7 @@ import { ChartSettings } from "../../types";
 interface IProps {
     settings: ChartSettings;
     updateSetting: Function;
+    reset: Function;
 }
-declare const ChartSettings: ({ settings, updateSetting }: IProps) => JSX.Element;
+declare const ChartSettings: ({ settings, updateSetting, reset }: IProps) => JSX.Element;
 export default ChartSettings;

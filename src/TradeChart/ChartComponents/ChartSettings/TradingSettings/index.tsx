@@ -42,13 +42,13 @@ const TradingSettings = ({settings, updateSetting, reset}: IProps) => {
         <Items>
             {/* orders */}
             <Item>
-                <input type="check" color="primary" 
-                    onChange={() => updateSetting({ type: 'showOrders', value: !settings.trade.showOrders})}
+                <input type="checkbox" color="primary" 
+                    onChange={() => updateSetting({ section: 'trade', type: 'showOrders', value: !settings.trade.showOrders})}
                     checked={settings.trade.showOrders}/>Show Orders
             </Item>
             <Item>
-                <input type="check" color="primary" 
-                    onChange={() => updateSetting({ type: 'showExecutions', value: !settings.trade.showExecutions})}
+                <input type="checkbox" color="primary" 
+                    onChange={() => updateSetting({ section: 'trade', type: 'showExecutions', value: !settings.trade.showExecutions})}
                     checked={settings.trade.showExecutions} />Show Executions
             </Item>
 
@@ -56,8 +56,8 @@ const TradingSettings = ({settings, updateSetting, reset}: IProps) => {
             <Item>
                 <Items>
                     <Item>
-                    <input type="check" color="primary" 
-                        onChange={() => updateSetting({ type: 'extendLines', value: !settings.trade.extendLines})}
+                    <input type="checkbox" color="primary" 
+                        onChange={() => updateSetting({ section: 'trade', type: 'extendLines', value: !settings.trade.extendLines})}
                         checked={settings.trade.extendLines} />Extend lines
                     </Item>
                 </Items>
@@ -65,14 +65,14 @@ const TradingSettings = ({settings, updateSetting, reset}: IProps) => {
 
             {/* misc */}
             <Item>
-                <input type="check" color="primary" 
-                    onChange={() => updateSetting({ type: 'playSound', value: !settings.trade.playSound})}
+                <input type="checkbox" color="primary" 
+                    onChange={() => updateSetting({ section: 'trade', type: 'playSound', value: !settings.trade.playSound})}
                     checked={settings.trade.playSound} />Play sound on order execution
             </Item>
 
             {/* reset */}
             <Item>
-                <ResetButton onClick={() => reset()}>Defaults</ResetButton>
+                <ResetButton onClick={() => reset('trade')}>Defaults</ResetButton>
             </Item>
         </Items>
     );

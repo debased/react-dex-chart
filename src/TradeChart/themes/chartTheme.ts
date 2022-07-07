@@ -1,19 +1,23 @@
-interface Theme {
-    chartLayout: {
-        layout: {
-            backgroundColor: string,
-            lineColor: string,
-            textColor: string,
+interface Layout {
+    backgroundColor: string,
+    lineColor: string,
+    textColor: string,
+}
+
+export interface ChartLayout {
+    layout: Layout,
+    grid: {
+        vertLines: {
+            color: string,
         },
-        grid: {
-            vertLines: {
-                color: string,
-            },
-            horzLines: {
-                color: string,
-            },
-        }
-    },
+        horzLines: {
+            color: string,
+        },
+    }
+}
+export interface Theme {
+    name: string,
+    chartLayout: ChartLayout,
     candleStickConfig: {
 
     },
@@ -25,7 +29,7 @@ interface Theme {
 }
 
 export const darkTheme: Theme = {
-
+    name: 'dark',
     //default for now
     candleStickConfig: {
 
@@ -52,7 +56,7 @@ export const darkTheme: Theme = {
 }
 
 export const lightTheme: Theme = {
-
+    name: 'light',
     //default for now
     candleStickConfig: {
 
@@ -63,9 +67,9 @@ export const lightTheme: Theme = {
 
     chartLayout: {
         layout: {
-            backgroundColor: "#ece8dd",
-            lineColor: "#2B2B43",
-            textColor: "#262626",
+            backgroundColor: "#ffff",
+            lineColor: "#0000",
+            textColor: "#0000",
         },
         grid: {
             vertLines: {

@@ -22,7 +22,7 @@ const ChartHeaderItems = styled.div`
 
 
 `;
-export const ChartHeaderItem = styled.div<{ref: any}>`
+export const ChartHeaderItem = styled.div<{ref?: any}>`
     display: flex;
     flex-direction: row;
 
@@ -61,21 +61,21 @@ interface IProps {
     interval: string, setInterval: Function,
     intervals: Array<TimeInterval>,
 
-    settings: ChartSettings, updateSetting: Function,
+    settings: ChartSettings, updateSetting: Function, reset: Function,
 }
 
 export const ChartHeader = ({
     marketInfo,
     interval, intervals, 
     setInterval,
-    settings, updateSetting
+    settings, updateSetting, reset
 }: IProps) => {
     return ( 
         <ChartHeaderContainer>
             <ChartHeaderItems>
                 <ChartHeaderContainer>
-                    <ChartHeaderItem ref={undefined}>
-                        <img alt=""/>
+                    <ChartHeaderItem>
+                        <img alt="" src={marketInfo?.image ? marketInfo.image : ''}/>
                         <ChartHeaderSymbol>
                             <span>{marketInfo.baseAsset.symbol}/{marketInfo.quoteAsset.symbol}</span>                            
                         </ChartHeaderSymbol>
@@ -87,7 +87,7 @@ export const ChartHeader = ({
                     />
                 </ChartHeaderContainer>
                 <ChartHeaderContainer>
-                    <Settings settings={settings} updateSetting={updateSetting}/>
+                    <Settings settings={settings} updateSetting={updateSetting} reset={reset}/>
                 </ChartHeaderContainer>
             </ChartHeaderItems>
         </ChartHeaderContainer>

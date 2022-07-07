@@ -16,7 +16,6 @@ export const fetcher = async (pair: string, interval: string, exchange: string, 
             if(pair.length === 7) _p = pair.match(/.{1,4}/g);
             if(pair.length === 6) _p = pair.match(/.{1,3}/g);
     
-            console.log("pair", _p);
             //pair not found
             if(!_p) return; 
 

@@ -9,6 +9,7 @@ import TimezoneSettings from "./TimezoneSettings";
 import BackgroundSettings from "./BackgroundSettings";
 import Draggable from 'react-draggable'; // Both at the same time
 import { ChartSettings } from "../../types";
+import { Gear, XLg } from "react-bootstrap-icons";
 
 const Settings = styled.div`
     min-width: 400px;
@@ -30,29 +31,23 @@ const SettingsHeader = styled.div`
 
     cursor: grab;
 
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
+    -webkit-touch-callout:  none;
+    -webkit-user-select:    none;
+     -khtml-user-select:    none;
+       -moz-user-select:    none;
+        -ms-user-select:    none;
+            user-select:    none;
 `;
 const HeaderItem = styled.div<{selected: boolean}>`
     flex: 1;
     padding: 8px 8px;
 
-    font-weight: bold;
     text-transform: uppercase;
     text-align: center;
 
-    ${({selected}) => selected ? 'color: white;' : ''}
+    ${({selected}) => selected ? `font-weight: bold;` : ''}
     
     border-left: 1px solid rgba(250, 250, 250, .1);
-
-    &:hover{
-        color: white;
-    }
 
 `;
 const SettingsContent = styled.div`
@@ -83,9 +78,10 @@ const SettingsExit = styled.div`
 interface IProps {
     settings: ChartSettings,
     updateSetting: Function,
+    reset: Function,
 }
 const ChartSettings = ({
-    settings, updateSetting
+    settings, updateSetting, reset
 }: IProps) => {
     const ref = useRef();
 
@@ -93,53 +89,52 @@ const ChartSettings = ({
         setShow(false);
     });
 
-    const [show, setShow] = useState(false);
-    const [tab, setTab] = useState("trading");
+    const [show, setShow] = useState<boolean>(false);
+    const [tab, setTab] = useState<string>("trading");
 
     const headerItems = [
-        {title: 'trading', component: <TradingSettings settings={settings} updateSetting={updateSetting} reset={() => console.log("reset")}/>},
-        {title: 'background', component: <BackgroundSettings background={settings.background} settings={settings} updateSetting={updateSetting} reset={() => console.log("reset")}/>},
-        {title: 'timezone', component: <TimezoneSettings settings={settings} updateSetting={updateSetting}/>},
+        {title: 'trading', component: <TradingSettings settings={settings} updateSetting={updateSetting} reset={reset}/>},
+        {title: 'background', component: <BackgroundSettings background={settings.background} settings={settings} updateSetting={updateSetting} reset={reset}/>},
+        {title: 'timezone', component: <TimezoneSettings settings={settings} updateSetting={updateSetting} reset={reset}/>},
     ];
 
     const content = headerItems.filter((obj) => obj.title.toLowerCase() === tab.toLowerCase());
 
     return (
         <>
-        <ChartHeaderItem ref={undefined} onClick={() => setShow(true)} >
-        ⚙️
-       
-        </ChartHeaderItem>
+            <ChartHeaderItem onClick={() => setShow(true)} >
+                <Gear/>
+            </ChartHeaderItem>
              {/* dropdown */}
-                <Draggable bounds="body"  handle="span">
-                    <ChartDropdownContent position={null} width={null} display={show} ref={ref}>
-                        <Settings>
-                            <span>
-                                <SettingsHeader >
-                                    <h5>Trading Settings</h5>
+            <Draggable bounds="body" handle="span" >
+                <ChartDropdownContent display={show} position="center" ref={ref}>
+                    <Settings>
+                        <span>
+                            <SettingsHeader >
+                                <h5>Trading Settings</h5>
 
-                                    <SettingsExit onClick={(e) => {
-                                        e.preventDefault();
-                                        setShow(!show);
-                                    }} >
-                                        ❌
-                                    </SettingsExit>
-                                </SettingsHeader>
-                            </span>
-                                <Tabs>
-                                    {headerItems.map((item, key) => (
-                                        <HeaderItem key={key}
-                                            selected={tab === item.title}
-                                            onClick={() => setTab(item.title)}>
-                                            {item.title}
-                                        </HeaderItem>
-                                    ))}
-                                </Tabs>
-  
-                            <SettingsContent>{content[0].component}</SettingsContent>
-                        </Settings>
-                    </ChartDropdownContent>
-                </Draggable>
+                                <SettingsExit onClick={(e) => {
+                                    e.preventDefault();
+                                    setShow(!show);
+                                }} >
+                                    <XLg size={22}/>
+                                </SettingsExit>
+                            </SettingsHeader>
+                        </span>
+                            <Tabs>
+                                {headerItems.map((item, key) => (
+                                    <HeaderItem key={key}
+                                        selected={tab === item.title}
+                                        onClick={() => setTab(item.title)}>
+                                        {item.title}
+                                    </HeaderItem>
+                                ))}
+                            </Tabs>
+
+                        <SettingsContent>{content[0].component}</SettingsContent>
+                    </Settings>
+                </ChartDropdownContent>
+            </Draggable>
         </>
     );
 }

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { createChart, LineStyle } from 'lightweight-charts';
 import ChartLoaderSpinner from './ChartComponents/ChartLoaderSpinner';
 import { ChartSettings, UserFill, UserOrder } from './types';
+import { ChartLayout } from './themes/chartTheme';
 
 const ContainerStyle = styled.div`
   height: 400px;
@@ -34,7 +35,7 @@ interface IProps {
 
   candleStickConfig: any,
   histogramConfig: any,
-  chartLayout: any,
+  chartLayout: ChartLayout,
   chartSetting: ChartSettings,
 
   marketAlias: string | undefined | null,
@@ -66,7 +67,6 @@ export const ChartView = ({
   const chart = useRef<any>();
   const candleSeries = useRef<any>();
   const volumeSeries = useRef<any>();
-
   const [priceLines, setPriceLines] = useState<Array<any>>([]);
   const [_, setMarkers] = useState<Array<any>>([]);
 
@@ -219,14 +219,13 @@ export const ChartView = ({
 
     if(!chart.current) return;
     const color = chartSetting.background.color;
-    const background = `rgba(${color.r},${color.g},${color.b},${color.a}`;
+    const background = color ? `rgba(${color.r},${color.g},${color.b},${color.a}` : chartLayout.layout.backgroundColor;
 
     chart.current.applyOptions({
+      ...chartLayout,
       layout: {
-        background: {
-          color: background,
-        }
-        
+        ...chartLayout.layout,
+        backgroundColor: background,
       }
     });
   }, [chartLayout, chartSetting.background.color]);
@@ -259,8 +258,7 @@ export const ChartView = ({
       <LegendContainer>{legendList}</LegendContainer>
       <div ref={chartContainerRef} style={{
         width: '100%',
-        height: '100%',
-        background: 'black'
+        height: '100%'
       }}/>
     </ContainerStyle>
   );

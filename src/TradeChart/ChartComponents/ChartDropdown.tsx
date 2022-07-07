@@ -8,18 +8,19 @@ export const ChartDropdown = styled.div`
 
 
 export const ChartDropdownContent = styled.div<{
-    display: boolean, 
-    ref: any | null | undefined, 
-    width: number | null | undefined
-    position: string  | null | undefined
+    display: boolean | null | undefined, 
+    ref?: any | null | undefined, 
+    width?: number | null | undefined
+    position?: string  | null | undefined
 }>`
+    position: absolute;    
     display: ${({display}) => display ? 'inline-block' : 'none'};
-    position: absolute;
-    background-color: #171C28;
-    border: 1px solid #0B121A;
+    ${({width}) => width ? `width: ${width};` : ``}
+    
+    background-color: ${({theme}) => theme.layout.backgroundColor};
+    border: 1px solid ${({theme}) => theme.grid.vertLines.color};
     border-radius: 8px;
     min-width: 440px;
-    ${({width}) => width ? `width: ${width};` : ``}
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,.4);
     z-index: 5;
     padding: 10px;

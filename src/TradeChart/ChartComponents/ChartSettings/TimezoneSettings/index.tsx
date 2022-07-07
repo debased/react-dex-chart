@@ -32,27 +32,26 @@ const ResetButton = styled.div`
 
 interface IProps {
     settings: ChartSettings,
-    updateSetting: Function
+    updateSetting: Function, reset: Function
 }
 const TimezoneSettings = ({
-    settings, updateSetting
+    settings, updateSetting, reset
 }: IProps) => {
     return (
         <Items>
             {/* orders */}
             <Item>
-                <input type="check" color="primary" 
-                    onClick={() => updateSetting({timezone: { showSessions: !settings.timezone.showSessions}})}
+                <input type="checkbox" color="primary" 
+                    onClick={() => updateSetting({section: 'timezone', type: 'showSessions', value: !settings.timezone.showSessions})}
                     checked={settings.timezone.showSessions}/>Show sessions
             </Item>
             <Item>
-                <input type="check" color="primary" 
- defaultChecked />Timezone
+                <input type="check" color="primary" defaultChecked />Timezone
             </Item>
 
             {/* reset */}
             <Item>
-                <ResetButton>Defaults</ResetButton>
+                <ResetButton onClick={() => reset('timezone')}>Defaults</ResetButton>
             </Item>
         </Items>
     );

@@ -1,7 +1,7 @@
 export interface MarketInfo {
     alias: string | undefined | null;
     pricePrecisionDecimal: number;
-    image: string | undefined | null;
+    image?: string | undefined | null;
     baseAsset: {
         symbol: string;
     };
@@ -24,7 +24,7 @@ export interface UserFill {
 }
 export interface TimeInterval {
     id: number;
-    value: string;
+    value: string | undefined | null;
     string: string;
 }
 export interface ChartSettings {
@@ -39,14 +39,15 @@ export interface ChartTrading {
     extendLines: boolean;
     playSound: boolean;
 }
+export interface ChartColor {
+    r: number;
+    g: number;
+    b: number;
+    a: number;
+}
 export interface ChartBackground {
-    gradiant: boolean;
-    color: {
-        r: number;
-        g: number;
-        b: number;
-        a: number;
-    };
+    gradient: boolean;
+    color: ChartColor | null | undefined;
 }
 export interface ChartTimezone {
     locale: string;

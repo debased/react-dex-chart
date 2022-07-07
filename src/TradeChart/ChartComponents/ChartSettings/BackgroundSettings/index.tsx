@@ -62,9 +62,9 @@ const BackgroundSettings = ({
             {/* orders */}
             <Items>
                 <Item>
-                    <input type="check" color="primary" 
-                    onChange={() => updateSetting({ type: 'gradient', value: !settings.background.gradiant})}
-                    checked={settings.background.gradiant} />Background gradient
+                    <input type="checkbox" color="primary" 
+                    onClick={() => updateSetting({ section: 'background', type: 'gradient', value: !settings.background.gradient})}
+                    checked={settings.background.gradient} />Background gradient
                 </Item>
                 <Items>
                     <Item>
@@ -73,21 +73,21 @@ const BackgroundSettings = ({
                            height: '100%',
                            margin: '20px',
                            padding: '4px',
-                           background: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`,
+                           background: color ? `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})` : 'rgba(0, 0, 0, 1)',
                         }}>Color</div>
                     </Item>
-                    <Item><RgbaColorPicker color={color} onChange={(color) => {
-                        updateSetting({type: 'color', value: color});
+                    <Item><RgbaColorPicker color={color ? color : {r: 0, g: 0, b: 0, a: 1}} onChange={(color) => {
+                        updateSetting({section: 'background', type: 'color', value: color});
                     }} /></Item>
                 </Items>
             </Items>
             <Item>
                 <Items>
                     <Item>
-                        <input type="check" color="primary" defaultChecked />Show Watermark
+                        <input type="checkbox" color="primary" defaultChecked />Show Watermark
                     </Item>
                     <Item>
-                        <Input type="text" value="{pair} - ZigZag ({interval})"/>
+                        <Input type="text" defaultValue="{pair} - ZigZag ({interval})"/>
                     </Item>
                 </Items>
 
@@ -97,9 +97,7 @@ const BackgroundSettings = ({
             {/* reset */}
             <Item>
                 <ResetButton
-                 onClick={() => {
-                    reset()
-                }}>Defaults</ResetButton>
+                 onClick={() => reset('background')}>Defaults</ResetButton>
             </Item>
         </Items>
     );

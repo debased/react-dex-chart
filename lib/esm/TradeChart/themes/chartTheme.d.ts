@@ -1,19 +1,22 @@
-interface Theme {
-    chartLayout: {
-        layout: {
-            backgroundColor: string;
-            lineColor: string;
-            textColor: string;
+interface Layout {
+    backgroundColor: string;
+    lineColor: string;
+    textColor: string;
+}
+export interface ChartLayout {
+    layout: Layout;
+    grid: {
+        vertLines: {
+            color: string;
         };
-        grid: {
-            vertLines: {
-                color: string;
-            };
-            horzLines: {
-                color: string;
-            };
+        horzLines: {
+            color: string;
         };
     };
+}
+export interface Theme {
+    name: string;
+    chartLayout: ChartLayout;
     candleStickConfig: {};
     histogramConfig: {};
 }

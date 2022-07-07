@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { ChartView } from "./ChartView";
 import { ChartHeader } from "./ChartComponents/ChartHeader";
 import { ChartLegendLastCandleInformation } from "./ChartComponents/ChartLegends/ChartLegendLastCandleInformation";
@@ -10,7 +10,7 @@ import { binanceListener } from "./utils/listeners/binanceListener";
 
 import { fetcher } from "./utils/fetchers";
 import { candleStickFormatter } from "./utils/formatters";
-import { darkTheme } from "./themes/chartTheme";
+import { ChartLayout } from "./themes/chartTheme";
 import { ChartSettings, MarketInfo, TimeInterval, UserFill, UserOrder } from "./types";
 
 const ChartContainer = styled.div`
@@ -19,16 +19,16 @@ flex-direction: column;
 
 flex: 1;
 
-background: #131722;
+background: ${({theme}) => theme.layout.backgroundColor};
 `;
 
 type IProps = {
-  error: null | string | Error,
+  error?: null | undefined | string | Error
   children: React.ReactNode | null
 }
 
 interface IState {
-  error?: null | string | Error
+  error?: null | undefined | string | Error
 }
 
 class ErrorBoundary extends React.Component<IProps, IState> {
@@ -71,31 +71,33 @@ class ErrorBoundary extends React.Component<IProps, IState> {
 
 
 interface ChartProps {
-  marketInfo: MarketInfo,
-  userOrders: Array<UserOrder>,
-  userFills: Array<UserFill>,
-
-  pair: string, exchange: string,
-  interval: string, setInterval: Function,
-  intervals: Array<TimeInterval>
-
-  settings: ChartSettings, updateSetting: Function
+  marketInfo: MarketInfo;
+  userOrders: Array<UserOrder>;
+  userFills: Array<UserFill>;
+  pair: string;
+  exchange: string;
+  interval: string;
+  setInterval(value: string): void;
+  intervals: Array<TimeInterval>;
+  chartLayout: ChartLayout;
+  settings: ChartSettings;
+  updateSetting(payload: {section: string, type: string, value: string}): void;
+  reset(section: string): void;
 }
 
-export const TradeChart = (props: ChartProps) => {
-  const [error, setError] = useState<any>(null);
-  
-  const chartLayout = darkTheme.chartLayout;
+export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProps) => {
+
+  const chartLayout = props.chartLayout;
   const settings = props.settings;
   const updateSetting = props.updateSetting;
 
   //chart color
   const background = settings.background.color;
-  chartLayout.layout.backgroundColor = `rgba(${background.r},${background.g},${background.b},${background.a})`;
+  chartLayout.layout.backgroundColor = background ? `rgba(${background.r},${background.g},${background.b},${background.a})` : chartLayout.layout.backgroundColor;
 
   //data
-  const [candleData, setData] = useState<any>(undefined);
-  const [updateData, setUpdateData] = useState<any>(undefined);
+  const [candleData, setData] = useState<Array<any>>([]);
+  const [updateData, setUpdateData] = useState<Array<any>>([]);
 
   //legend 1
   const [selectedLegendCandle, setLegendCandle] = useState<any>(undefined);
@@ -137,7 +139,6 @@ export const TradeChart = (props: ChartProps) => {
   const fetchCandleData = useCallback(async () => {
     const transformedData = await fetcher(props.pair, props.interval, props.exchange, (value: any) => {
       console.error("error: ", value);
-      setError(value);
     });
     const formattedData = candleStickFormatter(transformedData, props.exchange);
     const priorCandle = formattedData[formattedData.length - 2];
@@ -156,7 +157,6 @@ export const TradeChart = (props: ChartProps) => {
     const interval = props.interval;
     const exchange = props.exchange;
     var ws: any, listener: any, dependencies: any;
-    if(error) return;
 
     var formattedInterval;
 
@@ -196,14 +196,14 @@ export const TradeChart = (props: ChartProps) => {
     if(!ws) return;
 
     ws.onerror = (e: any) => {
-      setError(e);
+      console.error(e);
     };
 
     try{
       //start listener
       listener(ws, (candle: any) => {
         //update candlestick data
-        if(error || !candleData) return;
+        if(!candleData) return;
         setUpdateData(candle);
         
         //update legends correspondedly
@@ -212,7 +212,7 @@ export const TradeChart = (props: ChartProps) => {
         });
       }, dependencies);
     } catch(e) {
-      setError(e);
+      console.error(e);
     }
 
     return () => {
@@ -224,57 +224,57 @@ export const TradeChart = (props: ChartProps) => {
   useEffect(() => {
     fetchCandleData()
     .catch((e) => {
-      setError(e);
+      console.error(e);
     });
 
 
   }, [fetchCandleData, props.interval ])
 
-  if(error) return <ChartContainer>{ typeof error === "string" ? error : 'An error occured'}</ChartContainer>;
 
   return (
-    <ChartContainer>
-      <ErrorBoundary error={error}>
-        <ChartHeader
-          marketInfo={props.marketInfo}
-          interval={props.interval} 
-          intervals={props.intervals}
-          setInterval={(i: string)  => {
-            setInterval(i);
-          }}
+    <ThemeProvider theme={chartLayout}>
+      <ChartContainer>
+        <ErrorBoundary>
+          <ChartHeader
+            marketInfo={props.marketInfo}
+            interval={props.interval} 
+            intervals={props.intervals}
+            setInterval={props.setInterval}
 
-          settings={settings} updateSetting={updateSetting}
-        />
-        <ChartView
-          initialChartData={candleData}
-          updateData={updateData}
+            settings={settings} updateSetting={updateSetting}
+            reset={props.reset}
+          />
+          <ChartView
+            initialChartData={candleData}
+            updateData={updateData}
 
-          orders={props.userOrders} userFills={props.userFills}
-          marketAlias={props.marketInfo.alias}
+            orders={props.userOrders} userFills={props.userFills}
+            marketAlias={props.marketInfo.alias}
 
-          legends={legends}
-          chartLayout={chartLayout}
-          candleStickConfig={{
+            legends={legends}
+            chartLayout={chartLayout}
+            candleStickConfig={{
 
-            priceFormat: {
-              type: 'price',
-              precision: props.marketInfo.pricePrecisionDecimal,
-              minMove: 0.001,
-            }
-          }}
-          histogramConfig={{
-            priceLineVisible: false,
-            lastValueVisible: false,
-            overlay: true,
-            
-            scaleMargins: {
-              top: 0.85,
-              bottom: 0,
-            },
-          }}
-          chartSetting={props.settings}
-        />
-      </ErrorBoundary>
-    </ChartContainer>
+              priceFormat: {
+                type: 'price',
+                precision: props.marketInfo.pricePrecisionDecimal,
+                minMove: 0.001,
+              }
+            }}
+            histogramConfig={{
+              priceLineVisible: false,
+              lastValueVisible: false,
+              overlay: true,
+              
+              scaleMargins: {
+                top: 0.85,
+                bottom: 0,
+              },
+            }}
+            chartSetting={props.settings}
+          />
+        </ErrorBoundary>
+      </ChartContainer>
+    </ThemeProvider>
   );
 };
