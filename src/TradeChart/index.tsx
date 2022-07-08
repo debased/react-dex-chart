@@ -86,12 +86,10 @@ interface ChartProps {
 }
 
 export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProps) => {
-
   const chartLayout = props.chartLayout;
   const settings = props.settings;
   const updateSetting = props.updateSetting;
 
-  //chart color
   const background = settings.background.color;
   chartLayout.layout.backgroundColor = background ? `rgba(${background.r},${background.g},${background.b},${background.a})` : chartLayout.layout.backgroundColor;
 
@@ -99,7 +97,7 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
   const [candleData, setData] = useState<Array<any>>([]);
   const [updateData, setUpdateData] = useState<Array<any>>([]);
 
-  //legend 1
+  //legend OHLC
   const [selectedLegendCandle, setLegendCandle] = useState<any>(undefined);
   const [priorLegendCandle, setPriorLegendCandle] = useState<any>(undefined);
 

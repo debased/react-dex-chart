@@ -10,6 +10,7 @@ export interface MarketInfo {
         symbol: string,
     }
 }
+
 export interface UserOrder {
     price: string,
     size: string,
