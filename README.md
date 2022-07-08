@@ -24,6 +24,10 @@
 ## Getting Started
 These instructions will help guide you to get and setup a copy of this library into to your own local repository and using it.
 
+## Incomplete Parts
+Currenctly background gradiant is not yet implemented, and some exchanges do not work for data fetching, be it static or live.
+For some exchanges you will need your own CORS proxy server in order to load data.
+
 ## Data fetching
 This library is designed to use other exchanges API endpoints to fetch reliable data,
 this is done by pair splitting and listening to remote-endpoints
@@ -110,6 +114,28 @@ const darkTheme: Theme = {
           },
       },
   }
+}
+```
+
+Configure settings, and add your own:
+```js
+{
+    timezone: {
+        locale: '-4 UCT (NY)',
+        showSessions: false,
+    },
+    trade: {
+        showExecutions: true,
+        showOrders: true,
+        showPositions: true,
+        extendLines: true,
+        playSound: true,
+    },
+
+    background: {
+        gradient: false,
+        color: undefined
+    }
 }
 ```
 
