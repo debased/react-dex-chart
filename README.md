@@ -1,5 +1,5 @@
-# react-dex-chart
-## 📈 A Chart Component built with `react` and `lightweight-charts` - by debased dao
+# 📈 react-dex-chart 📉
+## A Chart Component built with `react` and `lightweight-charts` - by debased dao
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
