@@ -5,7 +5,6 @@ import { ChartHeader } from "./ChartComponents/ChartHeader";
 import { ChartLegendLastCandleInformation } from "./ChartComponents/ChartLegends/ChartLegendLastCandleInformation";
 
 import { coinbaseListener } from "./utils/listeners/coinbaseListener";
-import { kucoinListener } from "./utils/listeners/kucoinListener";
 import { binanceListener } from "./utils/listeners/binanceListener";
 
 import { fetcher } from "./utils/fetchers";
@@ -74,8 +73,6 @@ interface ChartProps {
   marketInfo: MarketInfo;
   userOrders: Array<UserOrder>;
   userFills: Array<UserFill>;
-  pair: string;
-  exchange: string;
   interval: string;
   setInterval(value: string): void;
   intervals: Array<TimeInterval>;
@@ -89,11 +86,13 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
   const chartLayout = props.chartLayout;
   const settings = props.settings;
   const updateSetting = props.updateSetting;
+  const marketInfo = props.marketInfo;
 
   const background = settings.background.color;
   chartLayout.layout.backgroundColor = background ? `rgba(${background.r},${background.g},${background.b},${background.a})` : chartLayout.layout.backgroundColor;
 
   //data
+  const pair = marketInfo.baseAsset.symbol + "-" + marketInfo.quoteAsset.symbol;
   const [candleData, setData] = useState<Array<any>>([]);
   const [updateData, setUpdateData] = useState<Array<any>>([]);
 
@@ -135,10 +134,10 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
 
   //fetch and set candle data once pair or interval changes
   const fetchCandleData = useCallback(async () => {
-    const transformedData = await fetcher(props.pair, props.interval, props.exchange, (value: any) => {
+    const transformedData = await fetcher(pair, props.interval, props.marketInfo.exchange, (value: any) => {
       console.error("error: ", value);
     });
-    const formattedData = candleStickFormatter(transformedData, props.exchange);
+    const formattedData = candleStickFormatter(transformedData, props.marketInfo.exchange);
     const priorCandle = formattedData[formattedData.length - 2];
     const lastCandle = formattedData[formattedData.length - 1];
     
@@ -147,28 +146,20 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
     setUpdateData(lastCandle); 
     setLegendCandle(lastCandle)
     setPriorLegendCandle(priorCandle);
-  }, [props.pair, props.interval]);
+  }, [pair, props.interval]);
 
   //fetch candle data using websockets and add it to the data. 
   useEffect(() => {
-    const pair = props.pair;
     const interval = props.interval;
-    const exchange = props.exchange;
+    const exchange = props.marketInfo.exchange;
     var ws: any, listener: any, dependencies: any;
 
     var formattedInterval;
 
     switch(exchange.toLowerCase()){
       case "coinbase":
-        var _p;
-        if(pair.length === 8) _p = pair.match(/.{1,4}/g);
-        if(pair.length === 7) _p = pair.match(/.{1,4}/g);
-        if(pair.length === 6) _p = pair.match(/.{1,3}/g);
-
-        //pair not found
-        if(!_p) return; 
-
-        var formattedPair = _p[0] + "-" + _p[1];
+        break;
+        var formattedPair = pair;
 
         ws = new WebSocket(`wss://ws-feed.exchange.coinbase.com`);
         dependencies = {productIds: [formattedPair], interval, exchange};
@@ -179,13 +170,13 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
       case "ftx":
         break;
       case "kucoin":
-        ws = new WebSocket(`wss://ws-feed.exchange.coinbase.com`);
-        listener = kucoinListener;
         break;
       case "binance":
       default:
         formattedInterval = interval;
-        ws = new WebSocket(`wss://stream.binance.com/ws/${pair.toLowerCase()}@kline_${formattedInterval}`);
+        formattedPair = pair.split('-')[0] + pair.split('-')[1];
+        console.log(formattedPair);
+        ws = new WebSocket(`wss://stream.binance.com/ws/${formattedPair.toLowerCase()}@kline_${formattedInterval}`);
         dependencies = {};
         listener = binanceListener;
     }
@@ -217,7 +208,7 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
       ws.close();
     }
 
-  }, [props.pair, props.interval]);
+  }, [pair, props.interval]);
 
   useEffect(() => {
     fetchCandleData()
@@ -227,7 +218,6 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
 
 
   }, [fetchCandleData, props.interval ])
-
 
   return (
     <ThemeProvider theme={chartLayout}>
@@ -246,8 +236,9 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
             initialChartData={candleData}
             updateData={updateData}
 
-            orders={props.userOrders} userFills={props.userFills}
-            marketAlias={props.marketInfo.alias}
+            orders={props.userOrders} 
+            userFills={props.userFills}
+            marketAlias={pair}
 
             legends={legends}
             chartLayout={chartLayout}

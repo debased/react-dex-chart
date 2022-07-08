@@ -9,7 +9,7 @@
 [![Sicko Mode][sick-shield]][sick-url]
 
 
-![](https://i.imgur.com/IAknieO.png)
+![](https://i.imgur.com/dHnVDiM.png)
 
 -----
 

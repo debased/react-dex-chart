@@ -5,8 +5,6 @@ interface ChartProps {
     marketInfo: MarketInfo;
     userOrders: Array<UserOrder>;
     userFills: Array<UserFill>;
-    pair: string;
-    exchange: string;
     interval: string;
     setInterval(value: string): void;
     intervals: Array<TimeInterval>;

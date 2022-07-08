@@ -1,7 +1,7 @@
 export interface MarketInfo {
-    alias: string | undefined | null;
     pricePrecisionDecimal: number;
     image?: string | undefined | null;
+    exchange: string;
     baseAsset: {
         symbol: string;
     };
@@ -19,8 +19,9 @@ export interface UserOrder {
 export interface UserFill {
     id: number;
     price: number;
+    market: string;
     side: string;
-    time: Date;
+    time: number;
 }
 export interface TimeInterval {
     id: number;

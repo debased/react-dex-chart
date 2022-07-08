@@ -62,6 +62,7 @@ export const ChartView = ({
 
   legends = { items: [] }
 }: IProps) => {
+
   const resizeObserver = useRef<any>();
   const chartContainerRef = useRef<any>();
   const chart = useRef<any>();
@@ -104,19 +105,17 @@ export const ChartView = ({
       let formatted: Array<any> = [];
       for (var key in ms){
 
-        const f = ms[key];
-        let market = f[2];
-        let side = f[3];
+        const fill: UserFill = ms[key];
 
         //break;
         var marker = { 
-          time: new Date(f[12]).getTime() / 1000, 
-          position: side === "b" ? 'belowBar' : 'aboveBar',
-          color:  side === "b" ? '#26A69A' : 'red',
-          shape:  side === "b" ? 'arrowUp' : 'arrowDown',
-          text:  side === "b" ? 'buy' : 'sell',
+          time: fill.time, 
+          position: fill.side === "b" ? 'belowBar' : 'aboveBar',
+          color:  fill.side === "b" ? '#26A69A' : 'red',
+          shape:  fill.side === "b" ? 'arrowUp' : 'arrowDown',
+          text:  fill.side === "b" ? 'buy' : 'sell',
         };       
-        if(market === marketAlias) formatted.push(marker);
+        if(fill.market === marketAlias) formatted.push(marker);
       }
       return formatted;
     }
@@ -139,13 +138,7 @@ export const ChartView = ({
       let formatted: Array<UserOrder> = [];
       for (var key in os){
         const o = os[key];  
-        const order: UserOrder = {
-          market: o[2],
-          side: o[3],
-          price: parseFloat(o[4]).toFixed(3),
-          size: parseFloat(o[5]).toFixed(3),
-          status: o[9]
-        };
+        const order: UserOrder = o;
         //has to be current market, not included and open status
         if(order.market === marketAlias && !formatted.includes(order) && order.status === "o"){
           formatted.push(order);

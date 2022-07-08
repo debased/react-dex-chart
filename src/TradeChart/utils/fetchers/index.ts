@@ -12,14 +12,7 @@ export const fetcher = async (pair: string, interval: string, exchange: string, 
 
     switch(exchange.toLowerCase()){
         case "coinbase":
-            if(pair.length === 8) _p = pair.match(/.{1,4}/g);
-            if(pair.length === 7) _p = pair.match(/.{1,4}/g);
-            if(pair.length === 6) _p = pair.match(/.{1,3}/g);
-    
-            //pair not found
-            if(!_p) return; 
-
-            formattedPair = _p[0] + "-" + _p[1];
+            formattedPair = pair.toUpperCase();
             formattedInterval = formatCoinbaseInterval(interval);
             fnc = coinbaseFetcher;
             break;
@@ -31,24 +24,21 @@ export const fetcher = async (pair: string, interval: string, exchange: string, 
         case "ftx":
             // https://ftx.com/api/markets/btc/usd/candles?resolution=3600
             //has to be split
-            if(pair.length === 8) _p = pair.match(/.{1,4}/g);
-            if(pair.length === 6) _p = pair.match(/.{1,3}/g);
-            
+            _p = pair.split('-');
             formattedPair = _p[0] + "/" + _p[1];
             formattedInterval = formatCoinbaseInterval(interval);
             fnc = ftxFetcher;
             break;
         case "kucoin":
-            if(pair.length === 8) _p = pair.match(/.{1,4}/g);
-            if(pair.length === 6) _p = pair.match(/.{1,3}/g);
-            
+            _p = pair.split('-');
             formattedPair = _p[0] + "/" + _p[1];
             formattedInterval = formatCoinexInterval(interval);
             fnc = kucoinFetcher;
             break;
         case "binance":
         default:
-            formattedPair = pair.toUpperCase();
+            _p = pair.split('-');
+            formattedPair = _p[0] + _p[1];
             formattedInterval = interval;
             fnc = binanceFetcher;
             break;
