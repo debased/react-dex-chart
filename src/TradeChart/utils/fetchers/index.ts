@@ -45,6 +45,5 @@ export const fetcher = async (pair: string, interval: string, exchange: string, 
     }
     //request data
     var transformedData = await fnc(formattedPair, formattedInterval, setError);
-    
     return transformedData;
 }

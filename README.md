@@ -10,6 +10,7 @@
 
 
 ![](https://i.imgur.com/dHnVDiM.png)
+![](https://i.imgur.com/IAknieO.png)
 
 -----
 
@@ -23,6 +24,26 @@
 ## Getting Started
 These instructions will help guide you to get and setup a copy of this library into to your own local repository and using it.
 
+## Data fetching
+This library is designed to use other exchanges API endpoints to fetch reliable data,
+this is done by pair splitting and listening to remote-endpoints
+
+Static data fetching currently works for these exchanges
+
+- [x] Binance
+- [x] Coinbase
+- [ ] Kucoin
+- [ ] Coinex
+- [ ] FTX
+
+
+Live data fetching currently works for these exchanges
+
+- [x] Binance
+- [ ] Coinbase
+- [ ] Kucoin
+- [ ] Coinex
+- [ ] FTX
 
 ## Prerequisites
 Feel free to use the package manager of your choice:
@@ -93,58 +114,8 @@ const darkTheme: Theme = {
 ```
 
 ----
-
-Example:
-
-```js
-<TradeChart
-
-    marketInfo={{
-        alias: "ETH-USDT", 
-        pricePrecisionDecimal: 6,
-        image: null,
-        baseAsset: { symbol: 'ETH'},    
-        quoteAsset: { symbol: 'USDT'},
-    }}
-
-    userFills={[]}
-    userOrders={[]}
-
-    pair={"ETH-USDT"} exchange={"binance"}
-    interval={interval} 
-    setInterval={setInterval}
-    intervals={[
-        {id: 0, value: "1h", string: "Hourly"},
-        {id: 1, value: "4h", string: "4 Hours"},
-        {id: 2, value: "1d", string: "Daily"},
-    ]}
-
-    updateSetting={(p: any) => console.log(p)}
-    settings={{
-        trade: {
-            showExecutions: false,
-            showOrders: false,
-            showPositions: false,
-            extendLines: true,
-            playSound: true,
-        },
-        timezone: {
-            locale: '-4 UCT (NY)',
-            showSessions: false,
-        },
-        background: {
-            gradiant: false,
-            color: {
-            r: 240,
-            g: 240,
-            b: 240,
-            a: 1,
-            }
-        }
-    }}
-
-/>
-```
+## View example project
+https://github.com/debased/react-dex-chart/
 
 ## Why this library?
 Mainly to not have a huge clutter of files in your repo,
