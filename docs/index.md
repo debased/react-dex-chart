@@ -1,37 +1,116 @@
-## Welcome to GitHub Pages
+# react-dex-chart
 
-You can use the [editor on GitHub](https://github.com/debased/react-dex-chart/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+A Chart Component built with `react` and `lightweight-charts` - by debased dao
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+![](https://i.imgur.com/dHnVDiM.png)
 
-### Markdown
+## Documentation
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Documentation for react-dex-chart
+## Getting Started
 
-```markdown
-Syntax highlighted code block
+These instructions will help guide you to get and setup a copy of this library into to your own local repository and using it.
 
-# Header 1
-## Header 2
-### Header 3
+## Prerequisites
+Feel free to use the package manager of your choice:
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
+NPM: `npm install react react-dom react-dex-chart`
 
-**Bold** and _Italic_ and `Code` text
+Yarn: `yarn add react react-dom react-dex-chart`
 
-[Link](url) and ![Image](src)
+------
+
+## Development
+If you are not interested in contributing to this repo and only in setting the chart up, skip to the part ahead.
+
+### Testing:
+
+`cd react-dex-chart && npm install`
+
+`sudo npm link`
+
+Inside of your testing project: 
+
+`npm link react-dex-chart`
+
+`npm run start`
+
+Setup the chart as usual to get started with development
+
+### Building react-dex-chart:
+
+`npm run build`
+
+------
+
+## Setting up the chart and its settings
+
+Create your own themes
+
+You can setup your own color schemes, or only allow a singular theme:
+```js
+
+const darkTheme: Theme = {
+  name: 'dark',
+  //default for now
+  candleStickConfig: {
+
+  },
+  histogramConfig: {
+
+  },
+
+  chartLayout: {
+      layout: {
+          backgroundColor: "rgba(7, 7, 28, 1)",
+          lineColor: "#2B2B43",
+          textColor: "#D9D9D9",
+      },
+      grid: {
+          vertLines: {
+              color: "rgba(250, 250, 250, .1)",
+          },
+          horzLines: {
+              color: "rgba(250, 250, 250, .1)",
+          },
+      },
+  }
+}
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+Configure settings, and add your own:
+```js
+{
+    timezone: {
+        locale: '-4 UCT (NY)',
+        showSessions: false,
+    },
+    trade: {
+        showExecutions: true,
+        showOrders: true,
+        showPositions: true,
+        extendLines: true,
+        playSound: true,
+    },
 
-### Jekyll Themes
+    background: {
+        gradient: false,
+        color: undefined
+    }
+}
+```
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/debased/react-dex-chart/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+----
+## View example project
+https://github.com/debased/react-dex-chart/
 
-### Support or Contact
+## Why this library?
+Mainly to not have a huge clutter of files in your repo,
+while also making an extended and easier to use charting library with an as least possible setup required and many options.
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Documentation
+[Find documentation here](https://github.com/debased/react-dex-chart/wiki)
+
+## Recommended usage
+We recommend using component states for settings, and allowing them to be updated to improve UX.
