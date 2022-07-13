@@ -12,7 +12,15 @@ const darkTheme: Theme = {
 
   },
   histogramConfig: {
-
+    visible: true,
+    priceLineVisible: false,
+    lastValueVisible: false,
+    overlay: true,
+    
+    scaleMargins: {
+      top: 0.85,
+      bottom: 0,
+    }
   },
 
   chartLayout: {
@@ -36,10 +44,18 @@ const lightTheme: Theme = {
   name: 'light',
   //default for now
   candleStickConfig: {
-
+    visible: true,
   },
   histogramConfig: {
-
+    visible: true,
+    priceLineVisible: false,
+    lastValueVisible: false,
+    overlay: true,
+    
+    scaleMargins: {
+      top: 0.85,
+      bottom: 0,
+    }
   },
 
   chartLayout: {
@@ -118,6 +134,8 @@ function App() {
       }}>
         <div style={{ border: '1px solid rgba(240, 240, 240, .2)' }}>
       <TradeChart
+        candleStickConfig={themePreset.candleStickConfig}
+        histogramConfig={themePreset.histogramConfig}
         marketInfo={{
           exchange: "binance",
           pricePrecisionDecimal: 6,
