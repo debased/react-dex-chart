@@ -1,5 +1,5 @@
-# react-dex-chart
-## 📈 A Chart Component built with `react` and `lightweight-charts` - by debased dao
+# 📈 react-dex-chart 📉
+## A Chart Component built with `react` and `lightweight-charts` - by debased dao
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -154,7 +154,7 @@ Mainly to not have a huge clutter of files in your repo,
 while also making an extended and easier to use charting library with an as least possible setup required and many options.
 
 ## Documentation
-[Find documentation here](https://github.com/debased/react-dex-chart/wiki)
+[Find documentation here](https://debased.github.io/react-dex-chart/)
 
 ## Recommended usage
 We recommend using component states for settings, and allowing them to be updated to improve UX.

@@ -16,6 +16,7 @@ const darkTheme: Theme = {
     }
   },
   histogramConfig: {
+    visible: true,
     priceLineVisible: false,
     lastValueVisible: false,
     overlay: true,
@@ -23,7 +24,7 @@ const darkTheme: Theme = {
     scaleMargins: {
       top: 0.85,
       bottom: 0,
-    },
+    }
   },
   chartLayout: {
       layout: {
