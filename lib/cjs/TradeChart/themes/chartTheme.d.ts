@@ -2,6 +2,7 @@ interface Layout {
     backgroundColor: string;
     lineColor: string;
     textColor: string;
+    watermarkColor: string;
 }
 export interface ChartLayout {
     layout: Layout;

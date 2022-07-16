@@ -49,6 +49,8 @@ export interface ChartColor {
 export interface ChartBackground {
     gradient: boolean;
     color: ChartColor | null | undefined;
+    watermark: boolean;
+    watermarkText?: string;
 }
 export interface ChartTimezone {
     locale: string;

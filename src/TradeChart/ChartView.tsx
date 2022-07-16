@@ -185,6 +185,8 @@ export const ChartView = ({
     if(!chartContainerRef.current) return;
     chartContainerRef.current.innerHTML = "";
     
+    const watermarkText = chartSetting.background.watermarkText ? chartSetting.background.watermarkText : '';
+
     chart.current = createChart(chartContainerRef.current, {
       layout: { 
         ...chartLayout.layout,
@@ -202,6 +204,11 @@ export const ChartView = ({
       crosshair: {
         mode: 0,
       },
+      watermark: {
+        visible: chartSetting.background.watermark,
+        text: watermarkText ? watermarkText : '',
+        color: chartLayout.layout.watermarkColor,
+      }
     });
     setInitialData();
     return () => chart.current.remove();
@@ -214,14 +221,24 @@ export const ChartView = ({
     const color = chartSetting.background.color;
     const background = color ? `rgba(${color.r},${color.g},${color.b},${color.a}` : chartLayout.layout.backgroundColor;
 
+    const watermarkText = chartSetting.background.watermarkText;
+
     chart.current.applyOptions({
       ...chartLayout,
       layout: {
         ...chartLayout.layout,
         backgroundColor: background,
+        
+      },
+      watermark: {
+        visible: chartSetting.background.watermark,
+        text: watermarkText ? watermarkText : '',
+        color: chartLayout.layout.watermarkColor,
       }
+      
     });
-  }, [chartLayout, chartSetting.background.color]);
+    console.log("update chart");
+  }, [chartLayout, chartSetting, chartSetting.background.color]);
 
   // Resize chart on container resizes.
   useEffect(() => {
@@ -241,7 +258,7 @@ export const ChartView = ({
   }, []);
 
 
-  if(!initialChartData) return <ChartLoaderSpinner text={"Loading data"}/>;
+  if(!(initialChartData.length > 0)) return <ChartLoaderSpinner/>;
 
   //setup legends
   const legendList = legends.items.map((legend, key) => <div key={key}>{legend.component}</div>);

@@ -10,16 +10,27 @@ const darkTheme: Theme = {
   //default for now
   candleStickConfig: {
 
+    priceFormat: {
+      type: 'price',
+      minMove: 0.001,
+    }
   },
   histogramConfig: {
-
+    priceLineVisible: false,
+    lastValueVisible: false,
+    overlay: true,
+    
+    scaleMargins: {
+      top: 0.85,
+      bottom: 0,
+    },
   },
-
   chartLayout: {
       layout: {
           backgroundColor: "rgba(7, 7, 28, 1)",
           lineColor: "#2B2B43",
           textColor: "#D9D9D9",
+          watermarkColor: 'rgba(250, 250, 250, .2)',
       },
       grid: {
           vertLines: {
@@ -37,9 +48,20 @@ const lightTheme: Theme = {
   //default for now
   candleStickConfig: {
 
+    priceFormat: {
+      type: 'price',
+      minMove: 0.001,
+    }
   },
   histogramConfig: {
-
+    priceLineVisible: false,
+    lastValueVisible: false,
+    overlay: true,
+    
+    scaleMargins: {
+      top: 0.85,
+      bottom: 0,
+    },
   },
 
   chartLayout: {
@@ -47,6 +69,7 @@ const lightTheme: Theme = {
           backgroundColor: "rgba(220, 240, 246, 1)",
           lineColor: "#000",
           textColor: "#000",
+          watermarkColor: 'rgba(0, 0, 0, .1)',
       },
       grid: {
           vertLines: {
@@ -80,7 +103,9 @@ function App() {
 
       background: {
         gradient: false,
-        color: undefined
+        color: undefined,
+        watermark: true,
+        watermarkText: '{PAIR} {INTERVAL}',
       }
     }
   );
@@ -90,13 +115,46 @@ function App() {
   });
 
   const updateSetting = ({section, type, value}: {section: string, type: string, value: any}) => {
-    setSetting({
-      ...settings,
-      [section]: {
-        ...[section],
-        [type]: value,
-      }
-    })
+    let state: ChartSettings = settings;
+    let newState:  ChartSettings = settings;
+    switch (section) {
+      case "trade":
+        state = {
+          ...settings,
+          trade: {
+            ...settings.trade,
+            [type]: value,
+          }
+        }
+        break;
+      case "background":
+        state = {
+          ...settings,
+          background: {
+            ...settings.background,
+            [type]: value,
+          }
+        }
+        
+        break;
+      case "timezone": 
+        state = {
+          ...settings,
+          timezone: {
+            ...settings.timezone,
+            [type]: value,
+          }
+        };
+        break;
+      default:
+        break;
+    }
+    
+    newState = {
+      ...state,
+    };
+
+    setSetting(newState);
   };
   
   return (
@@ -116,13 +174,13 @@ function App() {
       <div style={{
         padding: '50px',
       }}>
-        <div style={{ border: '1px solid rgba(240, 240, 240, .2)' }}>
+        <div style={{ border: '1px solid rgba(240, 240, 240, .2)'}}>
       <TradeChart
         marketInfo={{
           exchange: "binance",
           pricePrecisionDecimal: 6,
           image: null,
-          baseAsset: { symbol: 'ETH'}, quoteAsset: { symbol: 'USDT'},
+          baseAsset: { symbol: 'BTC'}, quoteAsset: { symbol: 'USDT'},
         }}
         userFills={[
           {id: 1, price: 1150, side: 'b', market: 'ETH-USDT', time: new Date().getTime() / 1000 - 36000},
@@ -143,6 +201,8 @@ function App() {
           {id: 7, value: "1w", string: "Weekly"},
           {id: 8, value: "1M", string: "Monthly"},
         ]}
+        candleStickConfig={themePreset.candleStickConfig}
+        histogramConfig={themePreset.histogramConfig}
         chartLayout={themePreset.chartLayout}
 
         reset={resetSettings}

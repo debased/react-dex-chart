@@ -70,9 +70,15 @@ If you are not interested in contributing to this repo and only in setting the c
 
 Inside of your testing project: 
 
+`cd example && npm install`
+
 `npm link react-dex-chart`
 
 `npm run start`
+
+Inside of react-dex-chart:
+
+`npm link example/node_modules/react`
 
 Setup the chart as usual to get started with development
 

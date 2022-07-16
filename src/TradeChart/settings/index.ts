@@ -15,6 +15,8 @@ export const presetSettings: ChartSettings = {
 
     background: {
       gradient: false,
-      color: undefined
+      color: undefined,
+      watermark: false,
+      watermarkText: '',
     }
 }

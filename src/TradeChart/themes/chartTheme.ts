@@ -2,6 +2,7 @@ interface Layout {
     backgroundColor: string,
     lineColor: string,
     textColor: string,
+    watermarkColor: string,
 }
 
 export interface ChartLayout {
@@ -43,6 +44,7 @@ export const darkTheme: Theme = {
             backgroundColor: "#131722",
             lineColor: "#2B2B43",
             textColor: "#D9D9D9",
+            watermarkColor: 'rgba(250, 250, 250, .1)',
         },
         grid: {
             vertLines: {
@@ -70,6 +72,7 @@ export const lightTheme: Theme = {
             backgroundColor: "#ffff",
             lineColor: "#0000",
             textColor: "#0000",
+            watermarkColor: 'rgba(0, 0, 0, .1)',
         },
         grid: {
             vertLines: {

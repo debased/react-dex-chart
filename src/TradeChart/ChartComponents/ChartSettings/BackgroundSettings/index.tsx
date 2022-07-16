@@ -64,7 +64,7 @@ const BackgroundSettings = ({
                 <Item>
                     <input type="checkbox" color="primary" 
                     onClick={() => updateSetting({ section: 'background', type: 'gradient', value: !settings.background.gradient})}
-                    checked={settings.background.gradient} />Background gradient
+                    defaultChecked={settings.background.gradient} />Background gradient
                 </Item>
                 <Items>
                     <Item>
@@ -83,11 +83,22 @@ const BackgroundSettings = ({
             </Items>
             <Item>
                 <Items>
+                    V1
                     <Item>
-                        <input type="checkbox" color="primary" defaultChecked />Show Watermark
+                        <input type="checkbox" color="primary" 
+                        onClick={() => updateSetting({ section: 'background', type: 'watermark', value: !settings.background.watermark})}
+                        defaultChecked={settings.background.watermark}/>Show Watermark
                     </Item>
                     <Item>
-                        <Input type="text" defaultValue="{pair} - ZigZag ({interval})"/>
+                        <Input type="text" 
+                        onChange={(e) => {
+                            updateSetting({
+                                section: 'background',
+                                type: 'watermarkText',
+                                value: e.target.value,
+                            })
+                        }}
+                        defaultValue={settings.background.watermarkText}/>
                     </Item>
                 </Items>
 

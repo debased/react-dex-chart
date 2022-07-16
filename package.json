@@ -1,7 +1,7 @@
 {
   "name": "react-dex-chart",
   "displayName": "React DEX chart",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run build:esm && npm run build:cjs",
@@ -40,8 +40,8 @@
     "web-vitals": "^2.1.4"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": ">17.0.0",
+    "react-dom": ">17.0.0"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.1",

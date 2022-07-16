@@ -11,13 +11,13 @@ import { fetcher } from "./utils/fetchers";
 import { candleStickFormatter } from "./utils/formatters";
 import { ChartLayout } from "./themes/chartTheme";
 import { ChartSettings, MarketInfo, TimeInterval, UserFill, UserOrder } from "./types";
+import { CandlestickSeriesOptions, HistogramSeriesOptions } from "lightweight-charts";
 
 const ChartContainer = styled.div`
 display: flex;
 flex-direction: column;
 
 flex: 1;
-
 background: ${({theme}) => theme.layout.backgroundColor};
 `;
 
@@ -71,12 +71,18 @@ class ErrorBoundary extends React.Component<IProps, IState> {
 
 interface ChartProps {
   marketInfo: MarketInfo;
+  
   userOrders: Array<UserOrder>;
   userFills: Array<UserFill>;
+  
   interval: string;
   setInterval(value: string): void;
   intervals: Array<TimeInterval>;
+  
+  candleStickConfig: Partial<CandlestickSeriesOptions>,
+  histogramConfig: Partial<HistogramSeriesOptions>,
   chartLayout: ChartLayout;
+  
   settings: ChartSettings;
   updateSetting(payload: {section: string, type: string, value: string}): void;
   reset(section: string): void;
@@ -134,6 +140,7 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
 
   //fetch and set candle data once pair or interval changes
   const fetchCandleData = useCallback(async () => {
+    setData([]);
     const transformedData = await fetcher(pair, props.interval, props.marketInfo.exchange, (value: any) => {
       console.error("error: ", value);
     });
@@ -158,7 +165,6 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
 
     switch(exchange.toLowerCase()){
       case "coinbase":
-        break;
         var formattedPair = pair;
 
         ws = new WebSocket(`wss://ws-feed.exchange.coinbase.com`);
@@ -175,7 +181,6 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
       default:
         formattedInterval = interval;
         formattedPair = pair.split('-')[0] + pair.split('-')[1];
-        console.log(formattedPair);
         ws = new WebSocket(`wss://stream.binance.com/ws/${formattedPair.toLowerCase()}@kline_${formattedInterval}`);
         dependencies = {};
         listener = binanceListener;
@@ -242,24 +247,8 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
 
             legends={legends}
             chartLayout={chartLayout}
-            candleStickConfig={{
-
-              priceFormat: {
-                type: 'price',
-                precision: props.marketInfo.pricePrecisionDecimal,
-                minMove: 0.001,
-              }
-            }}
-            histogramConfig={{
-              priceLineVisible: false,
-              lastValueVisible: false,
-              overlay: true,
-              
-              scaleMargins: {
-                top: 0.85,
-                bottom: 0,
-              },
-            }}
+            candleStickConfig={props.candleStickConfig}
+            histogramConfig={props.histogramConfig}
             chartSetting={props.settings}
           />
         </ErrorBoundary>

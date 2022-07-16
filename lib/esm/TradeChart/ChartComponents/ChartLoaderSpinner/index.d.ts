@@ -1,6 +1,6 @@
 /// <reference types="react" />
 interface IProps {
-    text: string;
+    text?: string;
 }
 export default function ChartLoaderSpinner({ text }: IProps): JSX.Element;
 export {};

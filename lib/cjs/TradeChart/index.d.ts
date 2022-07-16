@@ -1,6 +1,7 @@
 import React from "react";
 import { ChartLayout } from "./themes/chartTheme";
 import { ChartSettings, MarketInfo, TimeInterval, UserFill, UserOrder } from "./types";
+import { CandlestickSeriesOptions, HistogramSeriesOptions } from "lightweight-charts";
 interface ChartProps {
     marketInfo: MarketInfo;
     userOrders: Array<UserOrder>;
@@ -8,6 +9,8 @@ interface ChartProps {
     interval: string;
     setInterval(value: string): void;
     intervals: Array<TimeInterval>;
+    candleStickConfig: Partial<CandlestickSeriesOptions>;
+    histogramConfig: Partial<HistogramSeriesOptions>;
     chartLayout: ChartLayout;
     settings: ChartSettings;
     updateSetting(payload: {
