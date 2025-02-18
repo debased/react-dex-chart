@@ -3,6 +3,7 @@ import { ChartLayout } from "./themes/chartTheme";
 import { ChartSettings, MarketInfo, TimeInterval, UserFill, UserOrder } from "./types";
 import { CandlestickSeriesOptions, HistogramSeriesOptions } from "lightweight-charts";
 interface ChartProps {
+    candleData: Array<any>;
     marketInfo: MarketInfo;
     userOrders: Array<UserOrder>;
     userFills: Array<UserFill>;

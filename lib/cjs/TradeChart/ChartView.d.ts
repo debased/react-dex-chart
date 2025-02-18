@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from 'react';
 import { ChartSettings, UserFill, UserOrder } from './types';
 import { ChartLayout } from './themes/chartTheme';
 interface IProps {
@@ -15,5 +15,5 @@ interface IProps {
         items: Array<any>;
     };
 }
-export declare const ChartView: ({ initialChartData, updateData, candleStickConfig, histogramConfig, chartSetting, chartLayout, orders, userFills, marketAlias, legends }: IProps) => JSX.Element;
+export declare const ChartView: ({ initialChartData, updateData, candleStickConfig, histogramConfig, chartSetting, chartLayout, orders, userFills, marketAlias, legends }: IProps) => React.JSX.Element;
 export {};
