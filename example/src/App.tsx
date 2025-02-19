@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 
-import { ChartSettings, presetSettings, TradeChart } from "react-dex-chart";
-import { Theme } from 'react-dex-chart/lib/esm/TradeChart/themes/chartTheme';
+import { ChartSettings, presetSettings, TradeChart, Theme } from "react-dex-chart";
 import { ThemeToggle } from './ThemeToggle';
 
 const darkTheme: Theme = {
@@ -106,7 +105,7 @@ function App() {
         gradient: false,
         color: undefined,
         watermark: true,
-        watermarkText: '{PAIR} {INTERVAL}',
+        //watermarkText: '{PAIR} {INTERVAL}',
       }
     }
   );
@@ -177,6 +176,10 @@ function App() {
       }}>
         <div style={{ border: '1px solid rgba(240, 240, 240, .2)'}}>
       <TradeChart
+        candleData={[
+          { open: 4, high: 4, low: 4, close: 4}
+        ]}
+        updateData={[]}
         marketInfo={{
           exchange: "binance",
           pricePrecisionDecimal: 6,
