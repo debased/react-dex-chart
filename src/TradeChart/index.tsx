@@ -6,7 +6,7 @@ import { ChartLegendLastCandleInformation } from "./ChartComponents/ChartLegends
 
 import { ChartLayout } from "./themes/chartTheme";
 import { ChartSettings, MarketInfo, TimeInterval, UserFill, UserOrder } from "./types";
-import { CandlestickSeriesOptions, HistogramSeriesOptions } from "lightweight-charts";
+import { CandlestickData, CandlestickSeriesOptions, HistogramSeriesOptions } from "lightweight-charts";
 
 const ChartContainer = styled.div`
 display: flex;
@@ -65,7 +65,8 @@ class ErrorBoundary extends React.Component<IProps, IState> {
 
 
 interface ChartProps {
-  candleData: Array<any>;
+  candleData: Array<CandlestickData>;
+  updateData: Array<CandlestickData>;
   marketInfo: MarketInfo;
   
   userOrders: Array<UserOrder>;
@@ -84,8 +85,13 @@ interface ChartProps {
   reset(section: string): void;
 }
 
-export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProps) => {
+export const TradeChart = (props: ChartProps) => {
+  //legend OHLC
+  const [selectedLegendCandle, setLegendCandle] = useState<{open: number, high: number, low: number, close: number} | undefined>(undefined);
+  const [priorLegendCandle, setPriorLegendCandle] = useState<{open?: number, high?: number, low?: number, close?: number} | undefined>(undefined);
+
   const candleData = props.candleData;
+  const updateData = props.updateData;
   const chartLayout = props.chartLayout;
   const settings = props.settings;
   const updateSetting = props.updateSetting;
@@ -96,42 +102,9 @@ export const TradeChart: React.FunctionComponent<ChartProps> = (props: ChartProp
 
   //data
   const pair = marketInfo.baseAsset.symbol + "-" + marketInfo.quoteAsset.symbol;
-  const [updateData, _] = useState<Array<any>>([]);
-
-  //legend OHLC
-  const [selectedLegendCandle, setLegendCandle] = useState<any>(undefined);
-  const [priorLegendCandle, setPriorLegendCandle] = useState<any>(undefined);
 
   const legends = {
-    items: [  {
-      name: 'Last Candle Information (OHLC)',
-      type: "crosshair",
-      fnc: (param: any) => {
-        //console.log(param);
-        //nothing in current row
-        if(param.time === undefined){
-          setLegendCandle(undefined);
-          const priorCandle = candleData[candleData.length-1];
-      
-          setLegendCandle(updateData)
-          setPriorLegendCandle(priorCandle);
-          return;
-        }
-
-        //current selected candle
-        const candle = candleData.filter((c: any) => c.time === param.time)[0];
-        if(!candle) return;
-        const currentCandle = candleData.indexOf(candle); //current candle index
-        const previousCandle = candleData[currentCandle - 1]; //candle before current
-
-        setLegendCandle(candleData[currentCandle])
-        setPriorLegendCandle(previousCandle);
-      },
-      component: <ChartLegendLastCandleInformation
-        candleBefore={priorLegendCandle}
-        {...selectedLegendCandle} 
-      />,
-    }],
+    items: [],
   };
 
   return (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import { useRef, useState } from "react";
 import styled from "styled-components";
 import { useHandleClickOutside } from "../../utils/helpers";
@@ -83,11 +83,7 @@ interface IProps {
 const ChartSettings = ({
     settings, updateSetting, reset
 }: IProps) => {
-    const ref = useRef();
-
-    useHandleClickOutside(ref, () => {
-        setShow(false);
-    });
+    const ref = useRef<HTMLDivElement>();
 
     const [show, setShow] = useState<boolean>(false);
     const [tab, setTab] = useState<string>("trading");
@@ -100,13 +96,17 @@ const ChartSettings = ({
 
     const content = headerItems.filter((obj) => obj.title.toLowerCase() === tab.toLowerCase());
 
+    useHandleClickOutside(ref, () => {
+        setShow(false);
+    });
+
     return (
         <>
             <ChartHeaderItem onClick={() => setShow(true)} >
                 <Gear/>
             </ChartHeaderItem>
              {/* dropdown */}
-            <Draggable bounds="body" handle="span" >
+            <Draggable bounds="body" handle="span" nodeRef={ref as RefObject<HTMLDivElement>}>
                 <ChartDropdownContent display={show} position="center" ref={ref}>
                     <Settings>
                         <span>

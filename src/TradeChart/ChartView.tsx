@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 
 import styled from "styled-components";
-import { createChart, LineStyle } from 'lightweight-charts';
+import { createChart, LineStyle, CandlestickSeries } from 'lightweight-charts';
 import ChartLoaderSpinner from './ChartComponents/ChartLoaderSpinner';
 import { ChartSettings, UserFill, UserOrder } from './types';
 import { ChartLayout } from './themes/chartTheme';
@@ -72,9 +72,11 @@ export const ChartView = ({
   const [_, setMarkers] = useState<Array<any>>([]);
 
   const setInitialData = useCallback(() => {
-    candleSeries.current = chart.current.addCandlestickSeries(candleStickConfig);
-    volumeSeries.current = chart.current.addHistogramSeries(histogramConfig);
+    // Create the Main Series (Candlesticks)
+    candleSeries.current = chart.current.addSeries(CandlestickSeries);
+    //volumeSeries.current = chart.current.addHistogramSeries(histogramConfig);
 
+    console.log(candleSeries)
     //legends
     legends.items.forEach((legend) => {
       if(!legend.fnc) return;
@@ -86,10 +88,15 @@ export const ChartView = ({
         default:
           break;
       }
-    });    
+    });
 
-    candleSeries?.current?.setData(initialChartData);
-    volumeSeries?.current?.setData(initialChartData);
+    console.log("set candlestick series", candleSeries.current.setData, initialChartData)
+    if(candleSeries.current && initialChartData){
+      candleSeries.current.setData(initialChartData);
+    }
+    if(volumeSeries.current && initialChartData){
+      volumeSeries.current.setData(initialChartData);
+    }
 
     setOrderData();
     setMarkerData();
@@ -98,7 +105,7 @@ export const ChartView = ({
 
   //set order price lines
   const setMarkerData = () => {
-    candleSeries?.current?.setMarkers([]);
+    //candleSeries?.current?.setMarkers([]);
     if(!chartSetting.trade.showExecutions) return;
 
     const createMarkers = (ms: Array<any>) => {
@@ -121,8 +128,8 @@ export const ChartView = ({
     }
     
     let formattedMarkers = createMarkers(userFills);
-    candleSeries?.current?.setMarkers(formattedMarkers);
-    setMarkers(formattedMarkers);
+    //candleSeries?.current?.setMarkers(formattedMarkers);
+    //setMarkers(formattedMarkers);
     
   };
   //set order price lines
@@ -204,11 +211,11 @@ export const ChartView = ({
       crosshair: {
         mode: 0,
       },
-      watermark: {
+      /*watermark: {
         visible: chartSetting.background.watermark,
         text: watermarkText ? watermarkText : '',
         color: chartLayout.layout.watermarkColor,
-      }
+      }*/
     });
     setInitialData();
     return () => chart.current.remove();
