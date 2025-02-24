@@ -127,6 +127,7 @@ export const TradeChart = (props: ChartProps) => {
             orders={props.userOrders} 
             userFills={props.userFills}
             marketAlias={pair}
+            precision={props.marketInfo.pricePrecisionDecimal}
 
             legends={legends}
             chartLayout={chartLayout}

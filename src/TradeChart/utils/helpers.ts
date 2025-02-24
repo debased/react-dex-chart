@@ -1,3 +1,4 @@
+import { UTCTimestamp } from "lightweight-charts";
 import { useEffect } from "react";
 
 export const useHandleClickOutside = (ref: any, fnc: any) => {
@@ -15,4 +16,8 @@ export const useHandleClickOutside = (ref: any, fnc: any) => {
             document.removeEventListener('mousedown', mouseAway);
         }
     }, [ref]);
+}
+
+export const secondsToUTCTimestamp = (seconds: number): UTCTimestamp => {
+    return seconds as UTCTimestamp
 }
