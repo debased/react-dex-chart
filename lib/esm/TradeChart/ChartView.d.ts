@@ -4,6 +4,7 @@ import { ChartLayout } from './themes/chartTheme';
 interface IProps {
     initialChartData: Array<any>;
     updateData: Array<any> | null;
+    precision: number;
     candleStickConfig: any;
     histogramConfig: any;
     chartLayout: ChartLayout;
@@ -15,5 +16,5 @@ interface IProps {
         items: Array<any>;
     };
 }
-export declare const ChartView: ({ initialChartData, updateData, candleStickConfig, histogramConfig, chartSetting, chartLayout, orders, userFills, marketAlias, legends }: IProps) => React.JSX.Element;
+export declare const ChartView: ({ initialChartData, updateData, precision, candleStickConfig, histogramConfig, chartSetting, chartLayout, orders, userFills, marketAlias, legends }: IProps) => React.JSX.Element;
 export {};
