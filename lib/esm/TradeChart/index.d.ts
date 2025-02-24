@@ -1,8 +1,10 @@
 import React from "react";
 import { ChartLayout } from "./themes/chartTheme";
 import { ChartSettings, MarketInfo, TimeInterval, UserFill, UserOrder } from "./types";
-import { CandlestickSeriesOptions, HistogramSeriesOptions } from "lightweight-charts";
+import { CandlestickData, CandlestickSeriesOptions, HistogramSeriesOptions } from "lightweight-charts";
 interface ChartProps {
+    candleData: Array<CandlestickData>;
+    updateData: Array<CandlestickData>;
     marketInfo: MarketInfo;
     userOrders: Array<UserOrder>;
     userFills: Array<UserFill>;
@@ -20,5 +22,5 @@ interface ChartProps {
     }): void;
     reset(section: string): void;
 }
-export declare const TradeChart: React.FunctionComponent<ChartProps>;
+export declare const TradeChart: (props: ChartProps) => React.JSX.Element;
 export {};

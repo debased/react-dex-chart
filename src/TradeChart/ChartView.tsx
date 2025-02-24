@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 
 import styled from "styled-components";
-import { createChart, LineStyle } from 'lightweight-charts';
+import { createChart, LineStyle, CandlestickSeries, IChartApi, ColorType } from 'lightweight-charts';
 import ChartLoaderSpinner from './ChartComponents/ChartLoaderSpinner';
 import { ChartSettings, UserFill, UserOrder } from './types';
 import { ChartLayout } from './themes/chartTheme';
@@ -33,6 +33,8 @@ interface IProps {
   initialChartData: Array<any>,
   updateData: Array<any> | null,
 
+  precision: number,
+
   candleStickConfig: any,
   histogramConfig: any,
   chartLayout: ChartLayout,
@@ -50,6 +52,7 @@ interface IProps {
 export const ChartView = ({
   initialChartData,
   updateData,
+  precision,
   candleStickConfig,
   histogramConfig,
   chartSetting,
@@ -65,18 +68,39 @@ export const ChartView = ({
 
   const resizeObserver = useRef<any>();
   const chartContainerRef = useRef<any>();
-  const chart = useRef<any>();
+  const chart = useRef<IChartApi>();
   const candleSeries = useRef<any>();
   const volumeSeries = useRef<any>();
   const [priceLines, setPriceLines] = useState<Array<any>>([]);
   const [_, setMarkers] = useState<Array<any>>([]);
 
   const setInitialData = useCallback(() => {
-    candleSeries.current = chart.current.addCandlestickSeries(candleStickConfig);
-    volumeSeries.current = chart.current.addHistogramSeries(histogramConfig);
+    if(!chart.current) return
+    // Create the Main Series (Candlesticks)
+    candleSeries.current = chart.current.addSeries(CandlestickSeries, {
+      priceFormat: {
+        type: 'price', precision: 8, 
+        minMove: 0.000001
+      }
+    });
 
+    /*
+      apply custom priceFormatter to handle it manually
+
+    chart.current.applyOptions({
+      localization: {
+          priceFormatter: {
+            precision: 18,
+          },
+      },
+  });*/
+
+    //volumeSeries.current = chart.current.addHistogramSeries(histogramConfig);
+
+    console.log(candleSeries)
     //legends
     legends.items.forEach((legend) => {
+      if(!chart.current) return
       if(!legend.fnc) return;
 
       switch (legend.type) {
@@ -86,19 +110,25 @@ export const ChartView = ({
         default:
           break;
       }
-    });    
+    });
 
-    candleSeries?.current?.setData(initialChartData);
-    volumeSeries?.current?.setData(initialChartData);
+    console.log("set candlestick series", candleSeries.current.setData, initialChartData)
+    if(candleSeries.current && initialChartData){
+      candleSeries.current.setData(initialChartData);
+    }
+    if(volumeSeries.current && initialChartData){
+      volumeSeries.current.setData(initialChartData);
+    }
 
+    chart.current.timeScale().fitContent();
     setOrderData();
     setMarkerData();
-  }, [initialChartData]);
+  }, [initialChartData, precision]);
 
 
   //set order price lines
   const setMarkerData = () => {
-    candleSeries?.current?.setMarkers([]);
+    //candleSeries?.current?.setMarkers([]);
     if(!chartSetting.trade.showExecutions) return;
 
     const createMarkers = (ms: Array<any>) => {
@@ -121,8 +151,8 @@ export const ChartView = ({
     }
     
     let formattedMarkers = createMarkers(userFills);
-    candleSeries?.current?.setMarkers(formattedMarkers);
-    setMarkers(formattedMarkers);
+    //candleSeries?.current?.setMarkers(formattedMarkers);
+    //setMarkers(formattedMarkers);
     
   };
   //set order price lines
@@ -176,8 +206,8 @@ export const ChartView = ({
 
   //candle data
   useEffect(() => {
-      candleSeries?.current?.update(updateData);
-      volumeSeries?.current?.update(updateData);
+      //candleSeries?.current?.update(updateData);
+      //volumeSeries?.current?.update(updateData);
   }, [updateData]);
 
   //initialize chart
@@ -190,8 +220,11 @@ export const ChartView = ({
     chart.current = createChart(chartContainerRef.current, {
       layout: { 
         ...chartLayout.layout,
+        attributionLogo: false,
       },
-      grid: chartLayout.grid,
+      grid: {
+        ...chartLayout.grid,
+      },
       timeScale: {
         timeVisible: true,
         secondsVisible: true,
@@ -199,19 +232,20 @@ export const ChartView = ({
         rightOffset: 10,
       },
       rightPriceScale: {
-
+        autoScale: true,
+        ticksVisible: true,
       },
       crosshair: {
         mode: 0,
       },
-      watermark: {
+      /*watermark: {
         visible: chartSetting.background.watermark,
         text: watermarkText ? watermarkText : '',
         color: chartLayout.layout.watermarkColor,
-      }
+      }*/
     });
     setInitialData();
-    return () => chart.current.remove();
+    return () => chart.current?.remove();
   }, [setInitialData]);
 
   //update background settings
@@ -227,17 +261,17 @@ export const ChartView = ({
       ...chartLayout,
       layout: {
         ...chartLayout.layout,
-        backgroundColor: background,
+        background: {
+
+          type: ColorType.Solid,
+          color: background,
+          
+        },
+        attributionLogo: false,
         
       },
-      watermark: {
-        visible: chartSetting.background.watermark,
-        text: watermarkText ? watermarkText : '',
-        color: chartLayout.layout.watermarkColor,
-      }
-      
     });
-    console.log("update chart");
+    console.log("update chart", chart.current.options());
   }, [chartLayout, chartSetting, chartSetting.background.color]);
 
   // Resize chart on container resizes.
@@ -245,6 +279,7 @@ export const ChartView = ({
     if(!chartContainerRef.current) return;
 
     resizeObserver.current = new ResizeObserver((entries) => {
+      if(!chart.current) return
       const { width, height } = entries[0].contentRect;
       chart.current.applyOptions({
         width: width,

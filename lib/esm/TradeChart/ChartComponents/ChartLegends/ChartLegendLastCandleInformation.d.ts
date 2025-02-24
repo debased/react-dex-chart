@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from "react";
 interface IProps {
     open: number | null | undefined;
     high: number | null | undefined;
@@ -6,5 +6,5 @@ interface IProps {
     close: number | null | undefined;
     candleBefore: any;
 }
-export declare const ChartLegendLastCandleInformation: ({ open, high, low, close, candleBefore }: IProps) => JSX.Element;
+export declare const ChartLegendLastCandleInformation: ({ open, high, low, close, candleBefore }: IProps) => React.JSX.Element;
 export {};

@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from "react";
 import { ChartSettings, MarketInfo, TimeInterval } from "../../types.js";
 export declare const ChartHeaderItem: import("styled-components").StyledComponent<"div", any, {
     ref?: any;
@@ -12,5 +12,5 @@ interface IProps {
     updateSetting: Function;
     reset: Function;
 }
-export declare const ChartHeader: ({ marketInfo, interval, intervals, setInterval, settings, updateSetting, reset }: IProps) => JSX.Element;
+export declare const ChartHeader: ({ marketInfo, interval, intervals, setInterval, settings, updateSetting, reset }: IProps) => React.JSX.Element;
 export {};
