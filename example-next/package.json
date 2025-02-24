@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "moment": "^2.30.1",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dex-chart": "^1.0.2",
